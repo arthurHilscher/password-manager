@@ -1,13 +1,21 @@
-public class Tree<Account> {
-    private Account root;
+import java.util.LinkedList;
 
-    public Tree(Account root) {
+public class Tree {
+    private AccountNode root;
+
+    public Tree(AccountNode root) {
         this.root = root;
     }
 
-    public Account getRoot() {return root;}
+    public Tree() {
+        this.root = null;
+    }
 
-    public void setRoot(Account root) {this.root = root;}
+    public AccountNode getRoot() {
+        return this.root;
+    }
 
-
+    public void setRoot(AccountNode root) {
+        this.root = root;
+    }
 }

@@ -38,7 +38,7 @@ public class AccountNode {
     }
 
     public boolean hasLeftChild() {return this.leftChild != null;}
-    
+
     public boolean hasRightChild() {return this.rightChild != null;}
 
     public boolean IsLeaf() {return this.leftChild == null && this.rightChild == null;}
