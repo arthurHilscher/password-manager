@@ -11,10 +11,12 @@ public class Main {
         Tree base = new Tree(node1);
 
         System.out.println(node1 == base.getRoot());
+        System.out.println(base.getRoot());
         base.insertAccount(account2);
         System.out.println(node1.hasLeftChild());
         System.out.println(node1.hasRightChild());
-
-
+        System.out.println("**********");
+        System.out.println(base.findAccount(account1.getService()));
+        System.out.println(base.findAccount(account2.getService()));
     }
 }

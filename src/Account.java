@@ -23,6 +23,6 @@ public class Account implements Comparable<Account> {
 
     @Override
     public int compareTo(Account otherAccount) {
-        return this.service.compareToIgnoreCase(otherAccount.service);
+        return this.service.compareTo(otherAccount.service);
     }
 }

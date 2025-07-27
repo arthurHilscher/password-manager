@@ -20,7 +20,7 @@ public class Tree {
     }
 
     public AccountNode findAccount(String service) {
-        return find(this.root, service.toLowerCase());
+        return find(this.root, service);
     }
 
     private AccountNode find(AccountNode node, String service) {
@@ -46,30 +46,25 @@ public class Tree {
         }
     }
 
-    private AccountNode insert(AccountNode node, Account account){
-        int comparison = account.compareTo(node.getAccount());
+    private void insert(AccountNode node, Account account){
+        int comparison = account.getService().compareTo(node.getAccount().getService());
         if(comparison < 0){
             if(node.hasLeftChild()){
-                return insert(node.getLeftChild(), account);
+                insert(node.getLeftChild(), account);
             }
             else{
                 AccountNode leftAccount = new AccountNode(account);
                 node.setLeftChild(leftAccount);
-                return leftAccount;
             }
         }
         else if(comparison > 0){
             if(node.hasRightChild()){
-                return insert(node.getRightChild(), account);
+                insert(node.getRightChild(), account);
             }
             else{
                 AccountNode rightAccount = new AccountNode(account);
                 node.setRightChild(rightAccount);
-                return rightAccount;
             }
-        }
-        else{
-            return null;
         }
     }
 }
