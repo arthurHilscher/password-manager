@@ -18,4 +18,58 @@ public class Tree {
     public void setRoot(AccountNode root) {
         this.root = root;
     }
+
+    public AccountNode findAccount(String service) {
+        return find(this.root, service.toLowerCase());
+    }
+
+    private AccountNode find(AccountNode node, String service) {
+        if (node == null) return null;
+
+        if (node.getAccount().getService().equals(service)) return node;
+
+        int comparison = service.compareTo(node.getAccount().getService());
+
+        if (comparison < 0) {
+            return find(node.getLeftChild(), service);
+        } else {
+            return find(node.getRightChild(), service);
+        }
+    }
+
+    public void insertAccount(Account account){
+        if(this.root == null){
+            this.root = new AccountNode(account);
+        }
+        else{
+            insert(this.root, account);
+        }
+    }
+
+    private AccountNode insert(AccountNode node, Account account){
+        int comparison = account.compareTo(node.getAccount());
+        if(comparison < 0){
+            if(node.hasLeftChild()){
+                return insert(node.getLeftChild(), account);
+            }
+            else{
+                AccountNode leftAccount = new AccountNode(account);
+                node.setLeftChild(leftAccount);
+                return leftAccount;
+            }
+        }
+        else if(comparison > 0){
+            if(node.hasRightChild()){
+                return insert(node.getRightChild(), account);
+            }
+            else{
+                AccountNode rightAccount = new AccountNode(account);
+                node.setRightChild(rightAccount);
+                return rightAccount;
+            }
+        }
+        else{
+            return null;
+        }
+    }
 }

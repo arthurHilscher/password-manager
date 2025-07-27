@@ -1,11 +1,11 @@
 public class Account implements Comparable<Account> {
     private String username;
-    private String encryptedPassword;
+    private String password;
     private String service;
 
-    public Account(String username, String encryptedPassword, String service) {
+    public Account(String username, String password, String service) {
         this.username = username;
-        this.encryptedPassword = encryptedPassword;
+        this.password = password;
         this.service = service;
     }
 
@@ -13,9 +13,9 @@ public class Account implements Comparable<Account> {
 
     public void setUsername(String username) {this.username = username;}
 
-    public String getPassword() {return encryptedPassword;}
+    public String getPassword() {return password;}
 
-    public void setPassword(String password) {this.encryptedPassword = password;}
+    public void setPassword(String password) {this.password = password;}
 
     public String getService() {return service;}
 
@@ -23,6 +23,6 @@ public class Account implements Comparable<Account> {
 
     @Override
     public int compareTo(Account otherAccount) {
-        return this.service.compareTo(otherAccount.service);
+        return this.service.compareToIgnoreCase(otherAccount.service);
     }
 }
