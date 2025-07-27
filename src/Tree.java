@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-
 public class Tree {
     private AccountNode root;
 
@@ -19,13 +17,17 @@ public class Tree {
         this.root = root;
     }
 
-    public void findAccount(String service) {
+    public AccountNode findAccount(String service) {
         if(root == null){
-            System.err.println("No account with this service: " + service + " was found.");
+            System.err.println("This operation is not possible, because there are no accounts");
+            return null;
         }
 
-        assert this.root != null;
-        find(this.root, service);
+        AccountNode result = find(this.root, service);
+        if(result == null){
+            System.out.println("There is no such service: " + service);
+        }
+        return result;
     }
 
     private AccountNode find(AccountNode node, String service) {
@@ -40,9 +42,12 @@ public class Tree {
 
         int comparison = service.compareTo(node.getAccount().getService());
 
-        if (comparison < 0) {
+        if(comparison == 0){
+            return node;
+        }
+        else if (comparison < 0) {
             return find(node.getLeftChild(), service);
-        } else {
+        } else { // c > 0
             return find(node.getRightChild(), service);
         }
     }
@@ -66,7 +71,7 @@ public class Tree {
             else{
                 AccountNode leftAccount = new AccountNode(account);
                 node.setLeftChild(leftAccount);
-                System.out.println("Inserted account was added to the tree as the left child node of: "
+                System.out.println(account.getService() + " was added to the tree as the left child node of: "
                         + node.getAccount().getService());
             }
         }
@@ -77,9 +82,12 @@ public class Tree {
             else{
                 AccountNode rightAccount = new AccountNode(account);
                 node.setRightChild(rightAccount);
-                System.out.println("Inserted account was added to the tree as the right child node of: "
+                System.out.println(account.getService() + " was added to the tree as the left child node of: "
                         + node.getAccount().getService());
             }
+        }
+        else{
+            System.out.println("Account: " + account.getService() + " already exists.");
         }
     }
 
@@ -88,7 +96,9 @@ public class Tree {
             System.err.println("Delete called on an empty tree");
             System.err.println("Please add a node before deleting one");
         }
+
         this.root = deleteNode(this.root, account);
+
     }
 
     private AccountNode deleteNode(AccountNode node, Account account){
@@ -106,13 +116,19 @@ public class Tree {
             node.setRightChild(deleteNode(node.getRightChild(), account));
         }
         else{
-            System.out.println("Following account " + account.getService() + " was found and deleted.");
-
             if(!node.hasLeftChild()){
-                return node.getRightChild();
+                AccountNode replacmentNode = node.getRightChild();
+                if(replacmentNode != null){
+                    replacmentNode.setParent(node.getParent());
+                }
+                return replacmentNode;
             }
             else if(!node.hasRightChild()){
-                return node.getLeftChild();
+                AccountNode replacmentNode = node.getLeftChild();
+                if(replacmentNode != null){
+                    replacmentNode.setParent(node.getParent());
+                }
+                return replacmentNode;
             }
 
             AccountNode successorNode = findMin(node.getRightChild());
