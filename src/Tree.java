@@ -19,14 +19,24 @@ public class Tree {
         this.root = root;
     }
 
-    public AccountNode findAccount(String service) {
-        return find(this.root, service);
+    public void findAccount(String service) {
+        if(root == null){
+            System.err.println("No account with this service: " + service + " was found.");
+        }
+
+        assert this.root != null;
+        find(this.root, service);
     }
 
     private AccountNode find(AccountNode node, String service) {
-        if (node == null) return null;
+        if(node == null){
+            return null;
+        }
 
-        if (node.getAccount().getService().equals(service)) return node;
+        if (node.getAccount().getService().equals(service)){
+            System.out.println("Found the following account with this service: " + node.getAccount().getService());
+            return node;
+        }
 
         int comparison = service.compareTo(node.getAccount().getService());
 
@@ -40,6 +50,7 @@ public class Tree {
     public void insertAccount(Account account){
         if(this.root == null){
             this.root = new AccountNode(account);
+            System.out.println("Inserted account was added to the tree as the root node");
         }
         else{
             insert(this.root, account);
@@ -55,6 +66,8 @@ public class Tree {
             else{
                 AccountNode leftAccount = new AccountNode(account);
                 node.setLeftChild(leftAccount);
+                System.out.println("Inserted account was added to the tree as the left child node of: "
+                        + node.getAccount().getService());
             }
         }
         else if(comparison > 0){
@@ -64,23 +77,23 @@ public class Tree {
             else{
                 AccountNode rightAccount = new AccountNode(account);
                 node.setRightChild(rightAccount);
+                System.out.println("Inserted account was added to the tree as the right child node of: "
+                        + node.getAccount().getService());
             }
         }
     }
 
     public void delete(Account account){
         if(this.root == null){
-            System.out.println("Delete called on an empty tree");
+            System.err.println("Delete called on an empty tree");
+            System.err.println("Please add a node before deleting one");
         }
         this.root = deleteNode(this.root, account);
-        if(this.root == null){
-            System.out.println("Tree is empty");
-        }
     }
 
     private AccountNode deleteNode(AccountNode node, Account account){
         if(node == null){
-            System.out.println("No such account found");
+            System.err.println("The account with this service: " + account.getService() + " was not found.");
             return null;
         }
 
@@ -93,7 +106,7 @@ public class Tree {
             node.setRightChild(deleteNode(node.getRightChild(), account));
         }
         else{
-            System.out.println("Following account was found: " + account);
+            System.out.println("Following account " + account.getService() + " was found and deleted.");
 
             if(!node.hasLeftChild()){
                 return node.getRightChild();
@@ -101,7 +114,44 @@ public class Tree {
             else if(!node.hasRightChild()){
                 return node.getLeftChild();
             }
+
+            AccountNode successorNode = findMin(node.getRightChild());
+            System.out.println("Inorder successor for: " + account.getService() + " is: " + successorNode.getAccount().getService());
+            node.getAccount().setService(successorNode.getAccount().getService());
+            node.setRightChild(deleteNode(node.getRightChild(), successorNode.getAccount()));
         }
         return node;
+    }
+
+    private AccountNode findMin(AccountNode node){
+        while(node.hasLeftChild()){
+            node = node.getLeftChild();
+        }
+        return node;
+    }
+
+    private void treeStructure(AccountNode node, String prefix, boolean isLeft){
+        if(node != null){
+            System.out.println(prefix + (isLeft ? "├── " : "└── ") + node.getAccount().getService());
+
+            boolean hasLeft = node.hasLeftChild();
+            boolean hasRight = node.hasRightChild();
+
+            if(hasLeft){
+                treeStructure(node.getLeftChild(), prefix + (isLeft ? "│   " : "    "), hasRight);
+            }
+            if(hasRight){
+                treeStructure(node.getRightChild(), prefix + (isLeft ? "│   " : "    "), false);
+            }
+        }
+    }
+
+    public void printTreeStructure(){
+        if(root == null){
+            System.out.println("The tree is empty.");
+            return;
+        }
+        System.out.println("Tree structure:");
+        treeStructure(root, "", false);
     }
 }
