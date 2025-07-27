@@ -67,4 +67,41 @@ public class Tree {
             }
         }
     }
+
+    public void delete(Account account){
+        if(this.root == null){
+            System.out.println("Delete called on an empty tree");
+        }
+        this.root = deleteNode(this.root, account);
+        if(this.root == null){
+            System.out.println("Tree is empty");
+        }
+    }
+
+    private AccountNode deleteNode(AccountNode node, Account account){
+        if(node == null){
+            System.out.println("No such account found");
+            return null;
+        }
+
+        int comparison = account.getService().compareTo(node.getAccount().getService());
+
+        if(comparison < 0){
+            node.setLeftChild(deleteNode(node.getLeftChild(), account));
+        }
+        else if(comparison > 0){
+            node.setRightChild(deleteNode(node.getRightChild(), account));
+        }
+        else{
+            System.out.println("Following account was found: " + account);
+
+            if(!node.hasLeftChild()){
+                return node.getRightChild();
+            }
+            else if(!node.hasRightChild()){
+                return node.getLeftChild();
+            }
+        }
+        return node;
+    }
 }
